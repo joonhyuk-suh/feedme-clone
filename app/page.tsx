@@ -1,10 +1,16 @@
+import Link from "next/link";
+
 import { Converter } from "@/components/feed-me/converter";
 import { ThemeToggle } from "@/components/feed-me/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <main className="mx-auto w-full max-w-[960px] flex-1 px-4 pt-3 pb-10">
-      <header className="flex justify-end">
+      <header className="flex items-center justify-end gap-1">
+        <Button variant="ghost" size="sm" render={<Link href="/settings" />} nativeButton={false}>
+          계정
+        </Button>
         <ThemeToggle />
       </header>
       <Converter />
