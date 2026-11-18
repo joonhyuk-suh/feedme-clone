@@ -94,3 +94,26 @@ test("헤더의 로그아웃은 메인에 머문 채 화면만 새로 고친다"
   expect(signOut).toHaveBeenCalled();
   expect(router.replace).not.toHaveBeenCalled();
 });
+
+test("로그아웃 상태 헤더에는 저장한 글이 없다", async () => {
+  const header = await renderHome();
+
+  expect(header.queryByRole("link", { name: "저장한 글" })).not.toBeInTheDocument();
+});
+
+test("로그인 상태 헤더 맨 앞에 저장한 글이 있다", async () => {
+  session = { email: "me@example.com", displayName: "준혁" };
+  const header = await renderHome();
+
+  const first = header.getAllByRole("link")[0];
+  expect(first).toHaveTextContent("저장한 글");
+  expect(first).toHaveAttribute("href", "/saved");
+});
+
+test("푸터는 변환한 내용을 저장하지 않는다고 말하지 않는다", async () => {
+  await renderHome();
+
+  expect(screen.getByRole("contentinfo")).not.toHaveTextContent(
+    "변환한 내용은 저장하지 않습니다."
+  );
+});

@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Paths that require a signed-in user. Everything else stays public.
-const PROTECTED_PATHS = ["/settings"];
+const PROTECTED_PATHS = ["/settings", "/saved"];
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });

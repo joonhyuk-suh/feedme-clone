@@ -3,8 +3,10 @@ import Link from "next/link";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Converter } from "@/components/feed-me/converter";
 import { ThemeToggle } from "@/components/feed-me/theme-toggle";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
+
+import { SaveableConverter } from "./saveable-converter";
 
 // Header label for the signed-in user: 표시 이름, or the email when it is empty.
 async function getAccountLabel() {
@@ -30,6 +32,9 @@ export default async function Home() {
       <header className="flex min-w-0 items-center justify-end gap-1">
         {accountLabel ? (
           <>
+            <Link href="/saved" className={buttonVariants({ variant: "ghost", size: "sm" })}>
+              저장한 글
+            </Link>
             <Button
               variant="ghost"
               size="sm"
@@ -53,9 +58,9 @@ export default async function Home() {
         )}
         <ThemeToggle />
       </header>
-      <Converter />
+      {accountLabel ? <SaveableConverter /> : <Converter />}
       <footer className="mt-10 border-t pt-4 text-center text-xs text-muted-foreground">
-        본문 추출: Defuddle · 변환한 내용은 저장하지 않습니다.
+        본문 추출: Defuddle · 저장 버튼을 누른 글만 내 계정에 저장됩니다.
       </footer>
     </main>
   );
