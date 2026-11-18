@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ArrowUpIcon, CircleAlertIcon, Loader2Icon, XIcon } from "lucide-react";
 
-import { ExportPanel } from "@/components/feed-me/export-panel";
-import { MarkdownView } from "@/components/feed-me/markdown-view";
+import { ResultView } from "@/components/feed-me/result-view";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import {
@@ -26,10 +25,15 @@ type State =
 
 const EXAMPLES = ["stephango.com/saw", "en.wikipedia.org/wiki/Markdown"];
 
-export function Converter() {
+export function Converter({
+  resultActions,
+}: {
+  /** 변환을 마친 결과마다 내보내기 패널 위에 놓을 동작. 새 변환마다 새로 마운트된다. */
+  resultActions?: (page: ConvertedPage) => ReactNode;
+} = {}) {
   const [input, setInput] = useState("");
   const [state, setState] = useState<State>({ kind: "idle" });
-  // 지우기·새 변환 때 내보내기 패널의 프롬프트 선택을 함께 초기화하기 위한 키
+  // 지우기·새 변환 때 결과 화면의 상태(프롬프트 선택, 저장됨)를 함께 초기화하기 위한 키
   const [session, setSession] = useState(0);
   const loading = state.kind === "loading";
 
@@ -202,31 +206,11 @@ export function Converter() {
       )}
 
       {state.kind === "done" && (
-        <div className="mt-6 grid items-start gap-5 md:grid-cols-[minmax(0,1fr)_300px]">
-          <Card className="p-6 md:px-7">
-            <header className="border-b pb-4">
-              <a
-                href={state.page.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={state.page.url}
-                className="block truncate text-xs text-muted-foreground hover:underline"
-              >
-                {state.page.url.replace(/^https?:\/\//, "")}
-              </a>
-              <h2 className="mt-2 mb-1.5 text-2xl leading-snug font-semibold tracking-tight wrap-anywhere">
-                {state.page.title}
-              </h2>
-              <p className="flex flex-wrap gap-x-2.5 text-[13px] text-muted-foreground">
-                {state.page.author && <span>{state.page.author}</span>}
-                {state.page.author && <span aria-hidden>·</span>}
-                <span>약 {state.page.markdown.length.toLocaleString("ko-KR")}자</span>
-              </p>
-            </header>
-            <MarkdownView markdown={state.page.markdown} />
-          </Card>
-          <ExportPanel key={session} page={state.page} />
-        </div>
+        <ResultView
+          key={session}
+          page={state.page}
+          actions={resultActions?.(state.page)}
+        />
       )}
     </>
   );

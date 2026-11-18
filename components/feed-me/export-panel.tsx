@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { CopyIcon, DownloadIcon } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,7 +20,7 @@ import { LLM_LABEL, planLlmHandoff, type Llm } from "@/lib/feed-me/llm";
 const PRESETS = ["요약해줘", "한국어로 번역해줘", "쉽게 설명해줘"];
 const CUSTOM = "custom";
 
-export function ExportPanel({ page }: { page: ConvertedPage }) {
+export function ExportPanel({ page, actions }: { page: ConvertedPage; actions?: ReactNode }) {
   const [choice, setChoice] = useState<string | null>(null);
   const [custom, setCustom] = useState("");
   const exportDoc = buildExportDocument(page);
@@ -94,6 +94,12 @@ export function ExportPanel({ page }: { page: ConvertedPage }) {
       aria-label="내보내기"
       className="grid gap-4 p-4 max-md:order-first md:sticky md:top-4"
     >
+      {actions && (
+        <>
+          <div className="flex flex-wrap items-center justify-end gap-2">{actions}</div>
+          <Separator />
+        </>
+      )}
       <section className="grid gap-2">
         <h3 className="text-sm font-medium">Markdown 내보내기</h3>
         <div className="grid grid-cols-2 gap-2">
