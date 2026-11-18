@@ -67,7 +67,11 @@ export function Converter() {
   return (
     <>
       <section className="relative isolate py-2">
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        {/* Dark mode uses a stronger glow and glass so the input stands out (spec: 비교안 C). */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 [&>span]:dark:scale-125 [&>span]:dark:bg-foreground/26"
+        >
           <span className="absolute top-28 left-[8%] h-28 w-56 rounded-full bg-foreground/10 blur-3xl" />
           <span className="absolute top-32 left-[48%] h-24 w-64 rounded-full bg-foreground/10 blur-3xl" />
           <span className="absolute top-24 right-[6%] h-20 w-36 rounded-full bg-foreground/10 blur-3xl" />
@@ -85,7 +89,7 @@ export function Converter() {
             convert(input);
           }}
         >
-          <InputGroup className="h-12 rounded-xl border-foreground/15 bg-background/55 shadow-lg backdrop-blur-md">
+          <InputGroup className="h-12 rounded-xl border-foreground/15 bg-background/55 shadow-lg backdrop-blur-md dark:border-foreground/32 dark:bg-foreground/10 dark:shadow-[inset_0_1px_0_0_color-mix(in_oklab,var(--foreground)_20%,transparent),0_0_24px_0_color-mix(in_oklab,var(--foreground)_10%,transparent),0_10px_30px_-10px_rgb(0_0_0/0.6)]">
             <InputGroupInput
               type="url"
               inputMode="url"
